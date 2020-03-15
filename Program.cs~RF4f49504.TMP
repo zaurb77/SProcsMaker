@@ -13,6 +13,8 @@ using Microsoft.SqlServer.Management.Common;
 
 // Should run the following to add preview version 160.1911221.0 of SMO
 // Install-Package Microsoft.SqlServer.SqlManagementObjects -Version 160.1911221.0-preview
+// from https://www.nuget.org/packages/Microsoft.SqlServer.SqlManagementObjects/160.1911221.0-preview#
+
 
 namespace SProcsMaker
 {
@@ -27,26 +29,23 @@ namespace SProcsMaker
             {
                 con.Open();
                 Console.WriteLine("Connected!");
-
-                string scriptDirectory = @"Sprocs\";
-                DirectoryInfo di = new DirectoryInfo(scriptDirectory);
-                FileInfo[] rgFiles = di.GetFiles("*.sql");
-                foreach (FileInfo fi in rgFiles)
-                {
-                    FileInfo fileInfo = new FileInfo(fi.FullName);
-                    string script = fileInfo.OpenText().ReadToEnd();
-                    //SqlConnection connection = new SqlConnection(con);
-                    Server server = new Server(new ServerConnection(con));
-                    server.ConnectionContext.ExecuteNonQuery(script);
-                    Console.WriteLine(fileInfo.Name + " created...");
-                }
             }
             catch (Exception)
             {
                 throw;
             }
 
-            //Console.ReadKey();
+            string scriptDirectory = @"Sprocs\";
+            DirectoryInfo d = new DirectoryInfo(scriptDirectory);
+            FileInfo[] rgFiles = d.GetFiles("*.sql");
+            foreach (FileInfo fi in rgFiles)
+            {
+                FileInfo fileInfo = new FileInfo(fi.FullName);
+                string script = fileInfo.OpenText().ReadToEnd();
+                //SqlConnection connection = new SqlConnection(con);
+                Server server = new Server(new ServerConnection(con));
+                server.ConnectionContext.ExecuteNonQuery(script);
+            }
 
         }
     }
